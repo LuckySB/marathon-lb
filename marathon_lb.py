@@ -1097,6 +1097,12 @@ def validateConfig(haproxy_config_file):
         logger.debug("skipping validation.")
         return True
 
+    # workaround bug
+    # replace \n with newline
+    cmd = ['tr', '-i', "'s/\\n/\n/g'", haproxy_config_file ]
+    logger.debug("replace \n with newline with command: " + str(cmd))
+    returncode = subprocess.call(args=cmd)
+
     # Check that config is valid
     cmd = ['haproxy', '-f', haproxy_config_file, '-c']
     logger.debug("checking config with command: " + str(cmd))
